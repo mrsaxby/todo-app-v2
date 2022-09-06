@@ -1,0 +1,36 @@
+[
+    {
+        "id": 1,
+        "title": "Go to the shop",
+        "description": "buy salad",
+        "dateCreated": "13/05/2022, 16:55:02",
+        "dateEdited": "19/05/2022, 15:56:10",
+        "deleted": false,
+        "starred": false,
+        "category": {
+            "id": 7,
+            "type": "Happy Face",
+            "icon": "☺",
+            "colour": "#ffae00"
+        },
+        "dateApplied": "06/09/2022",
+        "order": 2
+    },
+    {
+        "id": 2,
+        "title": "Walk the dogs",
+        "description": "in park",
+        "dateCreated": "13/05/2022, 16:55:02",
+        "dateEdited": "19/05/2022, 15:56:10",
+        "deleted": false,
+        "starred": true,
+        "category": {
+            "id": 7,
+            "type": "Happy Face",
+            "icon": "☺",
+            "colour": "#ffae00"
+        },
+        "dateApplied": "07/09/2022",
+        "order": 1
+    }
+]
