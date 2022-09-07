@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from "react";
 import DateCalendar from "../secondary/DateCalendar";
-
 import todoList from '../../../api/TasksApi'
+import Task from "../secondary/Task";
 
 
 export default function RightSection() {
@@ -19,10 +19,8 @@ export default function RightSection() {
 
     const [startOfWeek, setStartOfWeek] = useState(new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1)))
     const [allTasks] = useState(todoList())
+    const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString())
 
-
-
-    const [selectedDate, setSelectedDate] = useState(new Date().toDateString())
     const [tasksForSelectedDate, setTasksForSelectedDate] = useState(allTasks.filter(task => task.dateApplied === selectedDate).sort((a, b) => a.order - b.order))
 
     const getTasksForDay = (longDate: string) => allTasks.filter(task => task.dateApplied === longDate).sort((a, b) => a.order - b.order);
@@ -40,7 +38,11 @@ export default function RightSection() {
 
         return (
             <>
-                {new Date(startOfWeek).toLocaleString('en-gb', { month: 'long', year: 'numeric' })}
+                <div className="grid grid-cols-2 gap-4">
+                    <div>{new Date(startOfWeek).toLocaleString('en-gb', { month: 'long', year: 'numeric' })}</div>
+
+                    <div className="text-right"> <button onClick={() => dateSelected(new Date().toLocaleDateString())}>Today</button></div>
+                </div>
                 <div className="grid md:grid-cols-9 gap-3 text-center sm:grid sm:grid-cols-1">
 
                     <div className="self-center m-auto" onClick={() => getPreviousWeek()}>
@@ -51,7 +53,7 @@ export default function RightSection() {
                     {dates.map((day, index) => {
                         return (
                             <div onClick={() => dateSelected(day.longDate)} className="cursor-pointer">
-                                <DateCalendar day={day} index={index} />
+                                <DateCalendar day={day} selectedDate={selectedDate} />
                             </div>
                         )
                     })}
@@ -59,14 +61,11 @@ export default function RightSection() {
                         <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
-
                     </div>
                 </div>
             </>
-
         );
     }
-
 
     const getPreviousWeek = () => {
         setStartOfWeek(new Date(startOfWeek.setDate(startOfWeek.getDate() - 7)))
@@ -78,13 +77,11 @@ export default function RightSection() {
         createWeek()
     }
 
-
-
     const dateSelected = (longDate: string) => {
-        ///  console.log(longDate)
         setSelectedDate(longDate);
         setTasksForSelectedDate(allTasks.filter(task => task.dateApplied === longDate))
     }
+
 
 
 
@@ -94,18 +91,19 @@ export default function RightSection() {
 
             {createWeek()}
 
-            {/* 
-            <div className="mt-10">
-                {tasksForSelectedDate.length === 0 ?
-                    <div className="text-center">Nothing on today</div>
-                    :
-                    tasksForSelectedDate.map(item => <Task task={item} />)}
+            {
+                <div className="mt-10">
+                    {tasksForSelectedDate.length === 0 ?
+                        <div className="text-center">Nothing on today</div>
+                        :
+                        tasksForSelectedDate.map(item => <Task task={item} />)}
 
-            </div>
- */}
+                </div>
+            }
 
 
 
+            <button>Create</button>
         </div>
     )
 
