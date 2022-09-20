@@ -3,6 +3,7 @@ import { useState } from "react";
 export default function DateCalendar(props: any) {
     const [hovered, setHovered] = useState(false);
 
+
     const { day, date, longDate, tasks } = props.day;
     const selectedDate = props.selectedDate;
 
@@ -11,19 +12,22 @@ export default function DateCalendar(props: any) {
         let className = "border-b-[1px] pb-3 select-none text-sm";
 
         if (hovered) {
-            className += ' hover:border-[#fbbd05]';
+            className = 'border-b-[1px] pb-3 select-none text-sm hover:border-[#fbbd05]';
         }
-        if (longDate === selectedDate) {
-            return className += ' border-[#fbbd05]';
+        // Date Picked
+        if (longDate.toLocaleDateString() === selectedDate.toLocaleDateString()) {
+            return className = 'border-b-[2px] pb-3 select-none text-sm border-[#fbbd05]';
         }
-        if (longDate === new Date().toLocaleDateString()) {
-            return className += " border-[#ff7070]";
+        //Todays Date
+        if (longDate.toLocaleDateString() === new Date().toLocaleDateString()) {
+            return className = "border-b-[1px] pb-3 select-none text-sm border-[#ff7070]";
         }
 
         return className;
     }
 
 
+    console.log(tasks)
 
     return (
         <div onMouseEnter={() => setHovered(true)}>

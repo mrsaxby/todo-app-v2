@@ -1,29 +1,56 @@
 
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import DateCalendar from "../secondary/DateCalendar";
 import todoList from '../../../api/TasksApi'
 import Task from "../secondary/Task";
+import DatePicker from "../secondary/DatePicker";
 
-
-export default function RightSection() {
+export default function MainSection() {
 
     const [dates, setDates] = useState([
-        { day: "Monday", date: 0, longDate: '', tasks: {} },
-        { day: "Tuesday", date: 0, longDate: '', tasks: {} },
-        { day: "Wednesday", date: 0, longDate: '', tasks: {} },
-        { day: "Thursday", date: 0, longDate: '', tasks: {} },
-        { day: "Friday", date: 0, longDate: '', tasks: {} },
-        { day: "Saturday", date: 0, longDate: '', tasks: {} },
-        { day: "Sunday", date: 0, longDate: '', tasks: {} },
+        { day: "Monday", date: 0, longDate: new Date(), tasks: {} },
+        { day: "Tuesday", date: 0, longDate: new Date(), tasks: {} },
+        { day: "Wednesday", date: 0, longDate: new Date(), tasks: {} },
+        { day: "Thursday", date: 0, longDate: new Date(), tasks: {} },
+        { day: "Friday", date: 0, longDate: new Date(), tasks: {} },
+        { day: "Saturday", date: 0, longDate: new Date(), tasks: {} },
+        { day: "Sunday", date: 0, longDate: new Date(), tasks: {} },
     ]);
 
-    const [startOfWeek, setStartOfWeek] = useState(new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1)))
+    const getTasksForDay = (exampleDate: Date) => {
+        return allTasks.filter(task => task.dateApplied === exampleDate.toLocaleDateString()).sort((a, b) => a.order - b.order);
+    }
+
+
+    //d.getDate() - day + (day == 0 ? -6:1)
+    const [startOfWeek, setStartOfWeek] = useState(new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + (new Date().getDay() == 0 ? -6 : 1))))
     const [allTasks] = useState(todoList())
-    const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString())
+    const [selectedDate, setSelectedDate] = useState(new Date())
+    const [tasksForSelectedDate, setTasksForSelectedDate] = useState(getTasksForDay(new Date()))
 
-    const [tasksForSelectedDate, setTasksForSelectedDate] = useState(allTasks.filter(task => task.dateApplied === selectedDate).sort((a, b) => a.order - b.order))
 
-    const getTasksForDay = (longDate: string) => allTasks.filter(task => task.dateApplied === longDate).sort((a, b) => a.order - b.order);
+
+
+    const getPreviousWeek = () => {
+        setStartOfWeek(new Date(startOfWeek.setDate(startOfWeek.getDate() - 7)))
+        createWeek()
+    }
+
+    const getNextWeek = () => {
+        setStartOfWeek(new Date(startOfWeek.setDate(startOfWeek.getDate() + 7)))
+        createWeek()
+    }
+
+    const dateSelected = (longDate: Date) => {
+        setSelectedDate(longDate);
+
+        setStartOfWeek(new Date(new Date().setDate(longDate.getDate() - longDate.getDay() + (longDate.getDay() == 0 ? -6 : 1))))
+
+
+        setTasksForSelectedDate(allTasks.filter(task => task.dateApplied === longDate.toLocaleDateString()))
+    }
+
+
 
 
 
@@ -31,17 +58,20 @@ export default function RightSection() {
     const createWeek = () => {
         dates.forEach((day, index) => {
             let exampleDate = new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + index)
-            day.longDate = exampleDate.toLocaleDateString()
+            day.longDate = exampleDate
             day.date = exampleDate.getDate();
-            day.tasks = getTasksForDay(day.longDate);
+            day.tasks = getTasksForDay(exampleDate);
         });
 
         return (
             <>
                 <div className="grid grid-cols-2 gap-4">
-                    <div>{new Date(startOfWeek).toLocaleString('en-gb', { month: 'long', year: 'numeric' })}</div>
-
-                    <div className="text-right"> <button onClick={() => dateSelected(new Date().toLocaleDateString())}>Today</button></div>
+                    <div>
+                        <DatePicker month={new Date(startOfWeek).toLocaleString('en-gb', { month: 'long', year: 'numeric' })} selectedDate={selectedDate} dateSelected={dateSelected} />
+                    </div>
+                    <div className="text-right">
+                        <button onClick={() => dateSelected(new Date())}>Today</button>
+                    </div>
                 </div>
                 <div className="grid md:grid-cols-9 gap-3 text-center sm:grid sm:grid-cols-1">
 
@@ -51,8 +81,9 @@ export default function RightSection() {
                         </svg>
                     </div>
                     {dates.map((day, index) => {
+                        console.log(day)
                         return (
-                            <div onClick={() => dateSelected(day.longDate)} className="cursor-pointer">
+                            <div onClick={() => dateSelected(new Date(day.longDate))} className="cursor-pointer" key={new Date(day.longDate).getDate()}>
                                 <DateCalendar day={day} selectedDate={selectedDate} />
                             </div>
                         )
@@ -67,22 +98,6 @@ export default function RightSection() {
         );
     }
 
-    const getPreviousWeek = () => {
-        setStartOfWeek(new Date(startOfWeek.setDate(startOfWeek.getDate() - 7)))
-        createWeek()
-    }
-
-    const getNextWeek = () => {
-        setStartOfWeek(new Date(startOfWeek.setDate(startOfWeek.getDate() + 7)))
-        createWeek()
-    }
-
-    const dateSelected = (longDate: string) => {
-        setSelectedDate(longDate);
-        setTasksForSelectedDate(allTasks.filter(task => task.dateApplied === longDate))
-    }
-
-
 
 
 
@@ -91,19 +106,25 @@ export default function RightSection() {
 
             {createWeek()}
 
+            {/*   <div>
+                <select onChange={(e) => sortTasks(e)}>
+                    <option value={'created'}>Date Created</option>
+                    <option value={'edited'}>Date Edited</option>
+                    <option value={'importance'}>Importance</option>
+                </select>
+            </div> */}
             {
                 <div className="mt-10">
                     {tasksForSelectedDate.length === 0 ?
-                        <div className="text-center">Nothing on today</div>
+                        <div className="text-center border-b-[2px] pb-3 select-none text-sm border-[#fbbd05] w-[200px] m-auto">Nothing on today</div>
                         :
-                        tasksForSelectedDate.map(item => <Task task={item} />)}
-
+                        tasksForSelectedDate.map(item => <Task key={item.id} task={item} />)}
                 </div>
             }
 
 
 
-            <button>Create</button>
+            <a href="/task/create">Create</a>
         </div>
     )
 
