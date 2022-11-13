@@ -4,7 +4,6 @@ export default function Task(props: any) {
     const details = props.task;
     const [hovered, setHovered] = useState(false);
 
-
     const decideOnBorder = () => {
         if (hovered) {
             return { borderRight: '2px solid ' + details.category.colour };
@@ -25,7 +24,6 @@ export default function Task(props: any) {
                         {details.description}
                     </div>
                 </div>
-
                 <div className="col-span-1 text-right">
                     <div className="text-xs">
                         Last edited:  {details.dateEdited}
@@ -35,7 +33,7 @@ export default function Task(props: any) {
                     </div>
                 </div>
             </div>
-        </a >
+        </a>
     )
 
 

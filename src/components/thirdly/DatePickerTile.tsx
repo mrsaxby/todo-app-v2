@@ -3,7 +3,8 @@ import { useState } from "react";
 export default function DatePickerTile(props: any) {
     const dateOnCalendar = props.props
     const dateSelected = props.dateSelected
-
+    const selectDate = props.selectedDate.toLocaleDateString()
+    //console.log(props.selectedDate.toLocaleDateString())
 
     const [hovered, setHovered] = useState(false);
 
@@ -14,7 +15,8 @@ export default function DatePickerTile(props: any) {
             className = 'border-b-[1px] select-none inline-block w-[2em] text-center mb-2 pb-2 hover:border-[#fbbd05]';
         }
 
-        if (dateOnCalendar.toLocaleDateString() === props.selectedDate) {
+        //Date picked
+        if (dateOnCalendar.toLocaleDateString() === selectDate) {
             return className = 'border-b-[2px] select-none inline-block w-[2em] text-center mb-2 pb-2 border-b-[#fbbd05]';
         }
         //Todays Date
@@ -23,19 +25,11 @@ export default function DatePickerTile(props: any) {
         }
 
         return className;
-
-
     }
-
 
     return (
         <div className={className()} onMouseEnter={() => setHovered(true)} onClick={() => dateSelected(dateOnCalendar)} >
             {dateOnCalendar.getDate()}
-
-
         </div>
     )
-
-
 }
-

@@ -2,11 +2,8 @@ import { useState } from "react";
 
 export default function DateCalendar(props: any) {
     const [hovered, setHovered] = useState(false);
-
-
     const { day, date, longDate, tasks } = props.day;
     const selectedDate = props.selectedDate;
-
 
     const decideOnBorder = () => {
         let className = "border-b-[1px] pb-3 select-none text-sm";
@@ -26,16 +23,12 @@ export default function DateCalendar(props: any) {
         return className;
     }
 
-
-    console.log(tasks)
-
     return (
         <div onMouseEnter={() => setHovered(true)}>
             <div className={decideOnBorder()}>
                 <div className="pb-1">
                     {day}
                 </div>
-
                 <div className="text-xs">
                     {date}
                 </div>
@@ -43,10 +36,6 @@ export default function DateCalendar(props: any) {
             <div className="text-xs mt-1 min-h-[16px]">
                 {tasks.length !== 0 ? tasks.length : ''}
             </div>
-        </div >
+        </div>
     )
-
-
 }
-
-

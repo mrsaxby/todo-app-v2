@@ -21,15 +21,11 @@ export default function MainSection() {
         return allTasks.filter(task => task.dateApplied === exampleDate.toLocaleDateString()).sort((a, b) => a.order - b.order);
     }
 
-
     //d.getDate() - day + (day == 0 ? -6:1)
     const [startOfWeek, setStartOfWeek] = useState(new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + (new Date().getDay() == 0 ? -6 : 1))))
     const [allTasks] = useState(todoList())
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [tasksForSelectedDate, setTasksForSelectedDate] = useState(getTasksForDay(new Date()))
-
-
-
 
     const getPreviousWeek = () => {
         setStartOfWeek(new Date(startOfWeek.setDate(startOfWeek.getDate() - 7)))
@@ -43,17 +39,9 @@ export default function MainSection() {
 
     const dateSelected = (longDate: Date) => {
         setSelectedDate(longDate);
-
-        setStartOfWeek(new Date(new Date().setDate(longDate.getDate() - longDate.getDay() + (longDate.getDay() == 0 ? -6 : 1))))
-
-
-        setTasksForSelectedDate(allTasks.filter(task => task.dateApplied === longDate.toLocaleDateString()))
+        setStartOfWeek(new Date(new Date().setDate(longDate.getDate() - longDate.getDay() + (longDate.getDay() == 0 ? -6 : 1))));
+        setTasksForSelectedDate(allTasks.filter(task => task.dateApplied === longDate.toLocaleDateString()));
     }
-
-
-
-
-
 
     const createWeek = () => {
         dates.forEach((day, index) => {
@@ -65,23 +53,22 @@ export default function MainSection() {
 
         return (
             <>
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
+                <div className="grid grid-cols-2 gap-4 mb-[5%]">
+                    <div className="m-auto">
                         <DatePicker month={new Date(startOfWeek).toLocaleString('en-gb', { month: 'long', year: 'numeric' })} selectedDate={selectedDate} dateSelected={dateSelected} />
                     </div>
-                    <div className="text-right">
+                    <div className="m-auto">
                         <button onClick={() => dateSelected(new Date())}>Today</button>
                     </div>
                 </div>
-                <div className="grid md:grid-cols-9 gap-3 text-center sm:grid sm:grid-cols-1">
 
+                <div className="grid md:grid-cols-9 gap-3 text-center sm:grid sm:grid-cols-1">
                     <div className="self-center m-auto" onClick={() => getPreviousWeek()}>
                         <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
                         </svg>
                     </div>
                     {dates.map((day, index) => {
-                        console.log(day)
                         return (
                             <div onClick={() => dateSelected(new Date(day.longDate))} className="cursor-pointer" key={new Date(day.longDate).getDate()}>
                                 <DateCalendar day={day} selectedDate={selectedDate} />
@@ -98,21 +85,9 @@ export default function MainSection() {
         );
     }
 
-
-
-
     return (
         <div className="p-3">
-
             {createWeek()}
-
-            {/*   <div>
-                <select onChange={(e) => sortTasks(e)}>
-                    <option value={'created'}>Date Created</option>
-                    <option value={'edited'}>Date Edited</option>
-                    <option value={'importance'}>Importance</option>
-                </select>
-            </div> */}
             {
                 <div className="mt-10">
                     {tasksForSelectedDate.length === 0 ?
@@ -121,14 +96,7 @@ export default function MainSection() {
                         tasksForSelectedDate.map(item => <Task key={item.id} task={item} />)}
                 </div>
             }
-
-
-
             <a href="/task/create">Create</a>
         </div>
     )
-
-
 }
-
-

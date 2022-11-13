@@ -4,16 +4,14 @@ import todoList from '../../../api/TasksApi'
 export default function EditTask() {
     const [allTasks] = useState(todoList())
     const id = window.location.pathname.split('/')[2]
-
     const [task, setTask] = useState(allTasks.find(task => task.id === parseInt(id)))
-
 
     return (
         <div className="grid grid-cols-3 mx-[11%]">
             <div className="col-span-2">
             </div>
 
-            <div className="col-span-1 text-right "  >
+            <div className="col-span-1 text-right ">
                 <div>
                     {task?.id}
                 </div>
@@ -41,14 +39,7 @@ export default function EditTask() {
                 <div>
                     {task?.dateApplied}
                 </div>
-
             </div>
-        </div >
-
-
+        </div>
     )
-
-
 }
-
-

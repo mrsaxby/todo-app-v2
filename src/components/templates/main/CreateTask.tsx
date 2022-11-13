@@ -1,11 +1,9 @@
 import { useState } from 'react'
 import todoList from '../../../api/TasksApi'
 
-
 export default function CreateTask() {
     const [allTasks, setTasks] = useState(todoList())
     const [loading, setLoading] = useState("");
-
 
     let categories = [
         { id: 1, type: "Sun", icon: "\u2600" },
@@ -20,22 +18,16 @@ export default function CreateTask() {
         { id: 10, type: "Scales", icon: "\u2696" }
     ];
 
-
     return (
         <>
             <input type="text" placeholder='Title' autoComplete='off' />
-
-
             <select id="category">
                 <option value="---">---</option>
                 {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.icon}</option>)}
             </select>
-
             <input type="color" onChange={e => {
                 console.log(e.target.value);
             }} />
-
-
             <button onClick={() => {
                 let obj = {
                     "id": 3,
@@ -55,14 +47,9 @@ export default function CreateTask() {
                     "order": 2
                 };
                 todoList().push(obj)
-
                 //       fs.writeFileSync('data/todoList.json', JSON.stringify(todoList));
 
             }}>Create Task</button>
-
         </>
-
     )
-
-
 }

@@ -7,8 +7,6 @@ export default function Header() {
             Im a Header
         </div>
     )
-
-
 }
 
 
